@@ -16,6 +16,7 @@ import { ApiBearerAuth, ApiParam, ApiTags } from '@nestjs/swagger';
 import { CreateArticleDto } from './dto/create-article.dto';
 import { Public } from 'src/utils/auth/auth-validator';
 import { AuthDTO, AuthUser } from 'src/utils/auth/auth-decarator';
+import { UpdateArticleDto } from './dto/update-article.dto';
 
 @ApiTags('Articles')
 @ApiBearerAuth()
@@ -66,7 +67,11 @@ export class ArticlesController {
   @Put(':slug')
   @HttpCode(HttpStatus.OK)
   @ApiParam({ name: 'slug', type: String })
-  async update(slug: string, @Body() article: any, @Res() res: Response) {
+  async update(
+    @Param() slug: string,
+    @Body() article: UpdateArticleDto,
+    @Res() res: Response,
+  ) {
     const result = await this.articlesService.update(slug, article);
     return res.status(HttpStatus.OK).json({
       statusCode: HttpStatus.OK,

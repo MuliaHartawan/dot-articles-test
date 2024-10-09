@@ -2,7 +2,7 @@ import { Entity, PrimaryColumn, ManyToOne } from 'typeorm';
 import { Article } from './article.entity';
 import { Category } from './category.entity';
 
-@Entity('article_categories')
+@Entity('article_categories', { synchronize: false })
 export class ArticleCategory {
   @PrimaryColumn()
   article_id: number;

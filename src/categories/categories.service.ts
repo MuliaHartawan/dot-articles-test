@@ -1,8 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CreateArticleDto } from 'src/articles/dto/create-article.dto';
+import {
+  categoriesArticle,
+  CreateArticleDto,
+} from 'src/articles/dto/create-article.dto';
 import { Category } from 'src/models/category.entity';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { slugify } from 'src/utils/commons/slug-generate';
@@ -15,22 +18,26 @@ export class CategoriesService {
   ) {}
 
   async findAll() {
-    return await this.categoryRepository.find();
+    const categories = await this.categoryRepository.find();
+    categories.map((category: Category & { slug: string }) => {
+      category.slug = slugify(category.name);
+    });
+
+    return categories;
   }
   async store(category: CreateCategoryDto) {
-    category.slug = slugify(category.name);
-
     return await this.categoryRepository.upsert(category, ['name']);
   }
 
   async update(id: number, updateCategoryDto: UpdateCategoryDto) {
-    if (updateCategoryDto.name) {
-      updateCategoryDto.slug = slugify(updateCategoryDto.name);
-    }
     return await this.categoryRepository.update(id, updateCategoryDto);
   }
 
   async remove(id: number) {
     return await this.categoryRepository.delete(id);
+  }
+
+  async findbyIds(ids: Array<categoriesArticle>) {
+    return await this.categoryRepository.findBy({ id: In(ids) });
   }
 }

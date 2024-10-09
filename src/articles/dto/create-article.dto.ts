@@ -31,10 +31,10 @@ export class CreateArticleDto {
 
   @ApiProperty({ example: [1, 2], type: () => [categoriesArticle] })
   @IsOptional()
-  categories?: Array<categoriesArticle>;
+  categoryIds?: Array<categoriesArticle>;
 }
 
-class categoriesArticle {
+export class categoriesArticle {
   @IsOptional()
   @IsNumber()
   categoryId: number;

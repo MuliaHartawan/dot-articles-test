@@ -7,12 +7,16 @@ import { CreateArticleDto } from './dto/create-article.dto';
 import { slugify } from 'src/utils/commons/slug-generate';
 import { AuthDTO } from 'src/utils/auth/auth-decarator';
 import { stringRandom } from 'src/utils/commons/string-random';
+import { CategoriesService } from 'src/categories/categories.service';
+import { UpdateArticleDto } from './dto/update-article.dto';
+import { Category } from 'src/models/category.entity';
 
 @Injectable()
 export class ArticlesService {
   constructor(
     @InjectRepository(Article)
     private articleRepository: Repository<Article>,
+    private categoryService: CategoriesService,
   ) {}
 
   async findAll(): Promise<Article[]> {
@@ -21,7 +25,6 @@ export class ArticlesService {
 
   async findOne(slug: string): Promise<Article | undefined> {
     const article = await this.articleRepository.findOneBy({ title: slug });
-
     if (article) {
       await this.incrementViewCount(article.id);
     }
@@ -46,13 +49,27 @@ export class ArticlesService {
     newArticle.author_id = user.sub;
     newArticle.status = article.status;
 
-    return await this.articleRepository.save(newArticle);
+    const savedArticle = await this.articleRepository.save(newArticle);
+    if (article.categoryIds && article.categoryIds.length > 0) {
+      const categories = await this.categoryService.findbyIds(
+        article.categoryIds,
+      );
+
+      savedArticle.categories = categories;
+
+      await this.articleRepository.save(savedArticle);
+    }
+
+    return savedArticle;
   }
 
-  async update(slug: string, article: any): Promise<Article> {
-    const [checkTitle, number] = await this.articleRepository.findAndCount({
-      where: { title: article.title },
-    });
+  async update(slug: string, article: UpdateArticleDto): Promise<void> {
+    const [existingArticle, number] = await this.articleRepository.findAndCount(
+      {
+        where: { title: slug },
+        relations: ['categories'],
+      },
+    );
     if (article.title && number > 1) {
       article.slug = `${slugify(article.title)}-${stringRandom()}`;
     }
@@ -61,8 +78,22 @@ export class ArticlesService {
       article.slug = slugify(article.title);
     }
 
-    return await this.articleRepository.save({ slug, ...article });
+    const updatedArticle = {
+      ...article,
+    } as UpdateArticleDto & { categories: Category[] };
+
+    if (article.categoryIds && article.categoryIds.length > 0) {
+      const categories = await this.categoryService.findbyIds(
+        article.categoryIds,
+      );
+
+      updatedArticle.categories = categories;
+    }
+    Object.assign(existingArticle, updatedArticle);
+
+    await this.articleRepository.save(existingArticle);
   }
+
   async remove(slug: string): Promise<void> {
     await this.articleRepository.delete({ slug: slug });
   }
@@ -74,5 +105,9 @@ export class ArticlesService {
         view_count: article.view_count + 1,
       });
     }
+  }
+
+  async getArtcleBySlug(slug: string): Promise<Article | undefined> {
+    return await this.articleRepository.findOne({ where: { slug: slug } });
   }
 }

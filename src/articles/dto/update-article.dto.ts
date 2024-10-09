@@ -1,11 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import {
-  IsEnum,
-  IsNotEmpty,
-  IsOptional,
-  IsString,
-  IsNumber,
-} from 'class-validator';
+import { IsEnum, IsOptional, IsString, IsNumber } from 'class-validator';
 
 export class UpdateArticleDto {
   @ApiProperty({ example: 'My first article' })
@@ -31,7 +25,7 @@ export class UpdateArticleDto {
 
   @ApiProperty({ example: [1, 2], type: () => [categoriesArticle] })
   @IsOptional()
-  categories?: Array<categoriesArticle>;
+  categoryIds?: Array<categoriesArticle>;
 }
 
 class categoriesArticle {
