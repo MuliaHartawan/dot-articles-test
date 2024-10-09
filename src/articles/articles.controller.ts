@@ -28,7 +28,7 @@ export class ArticlesController {
   @HttpCode(HttpStatus.OK)
   async findAll(@Res() res: Response) {
     const articles = await this.articlesService.findAll();
-    return res.json({
+    return res.status(HttpStatus.OK).json({
       statusCode: HttpStatus.OK,
       message: 'Articles fetched successfully',
       data: articles,
@@ -41,7 +41,7 @@ export class ArticlesController {
   @ApiParam({ name: 'slug', type: String })
   async findOne(@Param() slug: string, @Res() res: Response) {
     const article = await this.articlesService.findOne(slug);
-    return res.json({
+    return res.status(HttpStatus.OK).json({
       statusCode: HttpStatus.OK,
       message: 'Article fetched successfully',
       data: article,
@@ -56,7 +56,7 @@ export class ArticlesController {
     @Res() res: Response,
   ) {
     const result = await this.articlesService.store(user, article);
-    return res.json({
+    return res.status(HttpStatus.CREATED).json({
       statusCode: HttpStatus.CREATED,
       message: 'Article created successfully',
       data: result,
@@ -68,7 +68,7 @@ export class ArticlesController {
   @ApiParam({ name: 'slug', type: String })
   async update(slug: string, @Body() article: any, @Res() res: Response) {
     const result = await this.articlesService.update(slug, article);
-    return res.json({
+    return res.status(HttpStatus.OK).json({
       statusCode: HttpStatus.OK,
       message: 'Article updated successfully',
       data: result,
@@ -80,7 +80,7 @@ export class ArticlesController {
   @ApiParam({ name: 'slug', type: String })
   async remove(slug: string, @Res() res: Response) {
     const result = await this.articlesService.remove(slug);
-    res.json({
+    res.status(HttpStatus.OK).json({
       statusCode: HttpStatus.OK,
       message: 'Article deleted successfully',
       data: result,

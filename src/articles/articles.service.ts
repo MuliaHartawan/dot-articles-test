@@ -22,8 +22,6 @@ export class ArticlesService {
   async findOne(slug: string): Promise<Article | undefined> {
     const article = await this.articleRepository.findOneBy({ title: slug });
 
-    console.log('=>', article);
-
     if (article) {
       await this.incrementViewCount(article.id);
     }
