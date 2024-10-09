@@ -5,10 +5,10 @@ import {
   ManyToMany,
   JoinTable,
 } from 'typeorm';
-import { Category } from './category.entity';
+import Category from './category.entity';
 
 @Entity('articles')
-export class Article {
+export default class Article {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -22,7 +22,7 @@ export class Article {
   content: string;
 
   @Column({ type: 'int', nullable: true })
-  author_id: number;
+  authorId: number;
 
   @Column({
     type: 'enum',
@@ -32,20 +32,20 @@ export class Article {
   status: string;
 
   @Column({ type: 'int', default: 0 })
-  view_count: number;
+  viewCount: number;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-  created_at: Date;
+  createdAt: Date;
 
   @Column({
     type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP',
     onUpdate: 'CURRENT_TIMESTAMP',
   })
-  updated_at: Date;
+  updatedAt: Date;
 
   @Column({ type: 'timestamp', nullable: true })
-  published_at: Date;
+  publishedAt: Date;
 
   @ManyToMany(() => Category, (category) => category.articles)
   @JoinTable({

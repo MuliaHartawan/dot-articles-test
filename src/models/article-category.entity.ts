@@ -1,14 +1,14 @@
 import { Entity, PrimaryColumn, ManyToOne } from 'typeorm';
-import { Article } from './article.entity';
-import { Category } from './category.entity';
+import Article from './article.entity';
+import Category from './category.entity';
 
 @Entity('article_categories', { synchronize: false })
-export class ArticleCategory {
+export default class ArticleCategory {
   @PrimaryColumn()
-  article_id: number;
+  articleId: number;
 
   @PrimaryColumn()
-  category_id: number;
+  categoryId: number;
 
   @ManyToOne(() => Article, (article) => article.categories, {
     onDelete: 'CASCADE',

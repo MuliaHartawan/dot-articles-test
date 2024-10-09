@@ -6,14 +6,13 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from 'src/users/users.service';
 import { LoginDto } from './dto/login.dto';
-import e from 'express';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private usersService: UsersService,
-    private jwtService: JwtService,
+    private readonly usersService: UsersService,
+    private readonly jwtService: JwtService,
   ) {}
 
   async register(registerDto: CreateUserDto): Promise<any> {
@@ -37,12 +36,12 @@ export class AuthService {
     const payload = {
       sub: user.id,
       email: user.email,
-      name: user.full_name,
-      avatar: user.avatar_url,
+      name: user.fullname,
+      avatar: user.avatarUrl,
       role: user.role,
     };
     return {
-      access_token: await this.jwtService.signAsync(payload, {
+      accessToken: await this.jwtService.signAsync(payload, {
         expiresIn: '7d',
       }),
     };

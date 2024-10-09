@@ -1,14 +1,8 @@
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  ManyToMany,
-  AfterLoad,
-} from 'typeorm';
-import { Article } from './article.entity';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToMany } from 'typeorm';
+import Article from './article.entity';
 
 @Entity('categories')
-export class Category {
+export default class Category {
   @PrimaryGeneratedColumn()
   id: number;
 

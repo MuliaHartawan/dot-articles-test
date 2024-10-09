@@ -21,13 +21,13 @@ export class User {
   password: string;
 
   @Column({ type: 'varchar', length: 100, nullable: true })
-  full_name: string;
+  fullname: string;
 
   @Column({ type: 'text', nullable: true })
   bio: string;
 
   @Column({ type: 'varchar', length: 255, nullable: true })
-  avatar_url: string;
+  avatarUrl: string;
 
   @Column({
     type: 'enum',
@@ -37,12 +37,12 @@ export class User {
   role: string;
 
   @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-  created_at: Date;
+  createdAt: Date;
 
   @UpdateDateColumn({
     type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP',
     onUpdate: 'CURRENT_TIMESTAMP',
   })
-  updated_at: Date;
+  updatedAt: Date;
 }
