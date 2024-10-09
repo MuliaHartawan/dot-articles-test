@@ -1,10 +1,13 @@
 import {
   Body,
   Controller,
+  Get,
   HttpCode,
   HttpStatus,
   Post,
+  Req,
   Res,
+  UseGuards,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
@@ -12,6 +15,7 @@ import { Public } from 'src/utils/auth/auth-validator';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
+import { AuthGuard } from '@nestjs/passport';
 
 @ApiTags('Authentication')
 @Controller('auth')
@@ -45,6 +49,27 @@ export class AuthController {
       statusCode: HttpStatus.OK,
       message: 'User logged in successfully',
       ...signIn,
+    });
+  }
+
+  @Public()
+  @Get('login/google')
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(AuthGuard('google'))
+  async googleAuth(): Promise<void> {
+    return null;
+  }
+
+  @Public()
+  @Get('google/callback')
+  @UseGuards(AuthGuard('google'))
+  @HttpCode(HttpStatus.OK)
+  async googleAuthRedirect(@Req() req: any, @Res() res: Response) {
+    const result = await this.authService.googleLogin(req);
+    return res.status(HttpStatus.OK).json({
+      statusCode: HttpStatus.OK,
+      message: 'User logged in successfully',
+      ...result,
     });
   }
 }

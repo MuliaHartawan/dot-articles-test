@@ -7,6 +7,8 @@ import { JwtModule } from '@nestjs/jwt';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from './auth.guard';
 import { UsersService } from 'src/users/users.service';
+import { PassportModule } from '@nestjs/passport';
+import { GoogleStrategy } from 'src/utils/google/google.strategy';
 
 @Module({
   imports: [
@@ -15,6 +17,7 @@ import { UsersService } from 'src/users/users.service';
       global: true,
       secret: process.env.JWT_SECRET,
     }),
+    PassportModule,
   ],
   providers: [
     AuthService,
@@ -23,6 +26,7 @@ import { UsersService } from 'src/users/users.service';
       useClass: AuthGuard,
     },
     UsersService,
+    GoogleStrategy,
   ],
   controllers: [AuthController],
 })

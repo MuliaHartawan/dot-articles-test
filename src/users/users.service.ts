@@ -25,7 +25,7 @@ export class UsersService {
   }
 
   async store(user: CreateUserDto): Promise<User> {
-    user.password = await bcrypt.hash(user.password, 10);
+    user.password = user.password ? await bcrypt.hash(user.password, 10) : null;
     return this.usersRepository.save(user);
   }
 
@@ -34,7 +34,7 @@ export class UsersService {
       if (user.password) {
         user.password = await bcrypt.hash(user.password, 10);
       }
-      return this.usersRepository.save({ id, ...user });
+      return await this.usersRepository.save({ id, ...user });
     } catch (error) {
       throw new InternalServerErrorException('Oops! something went wrong');
     }

@@ -28,11 +28,31 @@ export class AuthService {
     }
   }
 
-  async signIn(signInDto: LoginDto): Promise<any> {
+  async signIn(signInDto: LoginDto): Promise<object> {
     const user = await this.usersService.findByEmail(signInDto.email);
     if (!user) {
       throw new NotFoundException('Oops! user not found');
     }
+    const payload = {
+      sub: user.id,
+      email: user.email,
+      name: user.fullname,
+      avatar: user.avatarUrl,
+      role: user.role,
+    };
+    return {
+      accessToken: await this.jwtService.signAsync(payload, {
+        expiresIn: '7d',
+      }),
+    };
+  }
+
+  async googleLogin(req: any) {
+    let user = await this.usersService.findOne(req.user.email);
+    if (!user) {
+      user = await this.usersService.store(req.user);
+    }
+
     const payload = {
       sub: user.id,
       email: user.email,
