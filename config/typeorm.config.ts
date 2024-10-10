@@ -35,7 +35,6 @@ export const typeOrmConfig: TypeOrmModuleOptions = {
   logging: true,
 };
 
-// This is used by TypeORM migration scripts
 export const DatabaseSource = new DataSource({
   ...getDatabaseDataSourceOptions(typeOrmConfig as any),
 });

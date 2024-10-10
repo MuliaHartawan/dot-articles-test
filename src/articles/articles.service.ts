@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import Article from 'src/models/article.entity';
 import { Repository } from 'typeorm';
@@ -8,6 +8,8 @@ import { stringRandom } from 'src/utils/commons/string-random';
 import { CategoriesService } from 'src/categories/categories.service';
 import { UpdateArticleDto } from './dto/update-article.dto';
 import { AuthDTO } from 'src/utils/auth/auth-decarator';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { Cache } from 'cache-manager';
 
 @Injectable()
 export class ArticlesService {
@@ -15,10 +17,18 @@ export class ArticlesService {
     @InjectRepository(Article)
     private readonly articleRepository: Repository<Article>,
     private readonly categoryService: CategoriesService,
+    @Inject(CACHE_MANAGER)
+    private readonly cacheManager: Cache,
   ) {}
 
   async findAll(): Promise<Article[]> {
-    return this.articleRepository.find(); // Menghapus redundant await
+    const cachedArticle = await this.cacheManager.get<Article[]>('articles');
+    if (cachedArticle) {
+      return cachedArticle;
+    }
+    const articles = await this.articleRepository.find();
+    await this.cacheManager.set('articles', articles, 3600);
+    return articles;
   }
 
   async findOne(slug: string): Promise<Article | undefined> {
@@ -41,7 +51,7 @@ export class ArticlesService {
 
     newArticle.title = articleData.title;
     newArticle.content = articleData.content;
-    newArticle.authorId = user.sub; // Ganti author_id menjadi authorId
+    newArticle.authorId = user.sub;
     newArticle.status = articleData.status;
 
     const savedArticle = await this.articleRepository.save(newArticle);
@@ -50,7 +60,7 @@ export class ArticlesService {
         articleData.categoryIds,
       );
       savedArticle.categories = categories;
-
+      await this.cacheManager.del('articles');
       await this.articleRepository.save(savedArticle);
     }
 
@@ -77,17 +87,19 @@ export class ArticlesService {
 
     Object.assign(existingArticle, updatedArticle);
     await this.articleRepository.save(existingArticle);
+    await this.cacheManager.del('articles');
   }
 
   async remove(slug: string): Promise<void> {
     await this.articleRepository.delete({ slug });
+    await this.cacheManager.del('articles');
   }
 
   async incrementViewCount(id: number): Promise<void> {
     const article = await this.articleRepository.findOne({ where: { id } });
     if (article) {
       await this.articleRepository.update(id, {
-        viewCount: article.viewCount + 1, // Ganti view_count menjadi viewCount
+        viewCount: article.viewCount + 1,
       });
     }
   }

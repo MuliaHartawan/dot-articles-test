@@ -16,3 +16,23 @@ services:
       - ./logs:/app/logs
       - /etc/localtime:/etc/localtime:ro
     restart: unless-stopped
+    networks:
+      - dot-articles-network
+
+  redis:
+    image: redis
+    container_name: redis-service
+    volumes:
+      - redis_data:/data
+    ports:
+      - 6379:6379
+    restart: unless-stopped
+    read_only: true
+    networks:
+      - dot-articles-network
+
+volumes:
+  redis_data:
+
+networks:
+  dot-articles-network:
