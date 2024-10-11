@@ -7,6 +7,7 @@ import {
   CreateArticleDto,
 } from '../../src/articles/dto/create-article.dto';
 import { UpdateArticleDto } from '../../src/articles/dto/update-article.dto';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
 
 describe('ArticlesController (e2e)', () => {
   let app: INestApplication;
@@ -15,10 +16,19 @@ describe('ArticlesController (e2e)', () => {
     { categoryId: 2 },
   ];
 
+  const mockCacheManager = {
+    get: jest.fn(),
+    set: jest.fn(),
+    del: jest.fn(),
+  };
+
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
-    }).compile();
+    })
+      .overrideProvider(CACHE_MANAGER)
+      .useValue(mockCacheManager)
+      .compile();
 
     app = moduleFixture.createNestApplication();
     await app.init();
