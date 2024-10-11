@@ -1,13 +1,13 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import Article from 'src/models/article.entity';
+import Article from '../../src/models/article.entity';
 import { Repository } from 'typeorm';
 import { CreateArticleDto } from './dto/create-article.dto';
-import { slugify } from 'src/utils/commons/slug-generate';
-import { stringRandom } from 'src/utils/commons/string-random';
-import { CategoriesService } from 'src/categories/categories.service';
+import { slugify } from '../../src/utils/commons/slug-generate';
+import { stringRandom } from '../../src/utils/commons/string-random';
+import { CategoriesService } from '../../src/categories/categories.service';
 import { UpdateArticleDto } from './dto/update-article.dto';
-import { AuthDTO } from 'src/utils/auth/auth-decarator';
+import { AuthDTO } from '../../src/utils/auth/auth-decarator';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
 

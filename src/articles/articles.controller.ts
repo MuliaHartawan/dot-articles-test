@@ -14,8 +14,8 @@ import { ArticlesService } from './articles.service';
 import { Response } from 'express';
 import { ApiBearerAuth, ApiParam, ApiTags } from '@nestjs/swagger';
 import { CreateArticleDto } from './dto/create-article.dto';
-import { Public } from 'src/utils/auth/auth-validator';
-import { AuthDTO, AuthUser } from 'src/utils/auth/auth-decarator';
+import { Public } from '../../src/utils/auth/auth-validator';
+import { AuthDTO, AuthUser } from '../../src/utils/auth/auth-decarator';
 import { UpdateArticleDto } from './dto/update-article.dto';
 
 @ApiTags('Articles')

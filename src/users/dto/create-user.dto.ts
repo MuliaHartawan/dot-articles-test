@@ -30,7 +30,7 @@ export class CreateUserDto {
   @IsOptional()
   @IsString()
   @MaxLength(100)
-  full_name?: string;
+  fullName?: string;
 
   @ApiProperty({ example: 'Software Engineer' })
   @IsOptional()
@@ -41,7 +41,7 @@ export class CreateUserDto {
   @IsOptional()
   @IsString()
   @MaxLength(255)
-  avatar_url?: string;
+  avatarUrl?: string;
 
   @ApiProperty({ example: 'admin' })
   @IsOptional()

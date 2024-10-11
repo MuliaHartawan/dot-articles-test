@@ -8,7 +8,7 @@ import {
   Res,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { AuthDTO, AuthUser } from 'src/utils/auth/auth-decarator';
+import { AuthDTO, AuthUser } from '../../src/utils/auth/auth-decarator';
 import { Response } from 'express';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';

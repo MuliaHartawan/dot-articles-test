@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { categoriesArticle } from 'src/articles/dto/create-article.dto';
+import { categoriesArticle } from '../../src/articles/dto/create-article.dto';
 import { In, Repository } from 'typeorm';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
-import { slugify } from 'src/utils/commons/slug-generate';
-import Category from 'src/models/category.entity';
+import { slugify } from '../../src/utils/commons/slug-generate';
+import Category from '../../src/models/category.entity';
 
 @Injectable()
 export class CategoriesService {
