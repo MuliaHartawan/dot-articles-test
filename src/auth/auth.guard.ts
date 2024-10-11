@@ -8,7 +8,7 @@ import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
 import * as dotenv from 'dotenv';
 import { Reflector } from '@nestjs/core';
-import { IS_PUBLIC_KEY } from 'src/utils/auth/auth-validator';
+import { IS_PUBLIC_KEY } from '../../src/utils/auth/auth-validator';
 dotenv.config();
 
 @Injectable()
