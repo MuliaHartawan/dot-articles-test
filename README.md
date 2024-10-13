@@ -45,7 +45,6 @@ Follow the steps below to install the project:
    git clone https://github.com/MuliaHartawan/dot-articles-test.git
    cd dot-articles-test
    ```
-````
 
 2. Build and run with Docker:
 
@@ -68,7 +67,6 @@ As an amateur Backend Developer, I want to continue sharpening my skills and kno
 
 Thank you for checking out this project! If you have any questions, feel free to contact me. 😊
 
-```
 
 ## License
 
