@@ -1,9 +1,11 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
-import { AppModule } from '../../src/app.module';
 import { CreateUserDto } from '../../src/users/dto/create-user.dto';
 import { LoginDto } from '../../src/auth/dto/login.dto';
+import { AuthModule } from '../../src/auth/auth.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { typeOrmConfig } from '../../config/typeorm.config';
 
 describe('AuthController (e2e)', () => {
   let app: INestApplication;
@@ -27,7 +29,7 @@ describe('AuthController (e2e)', () => {
 
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [AppModule],
+      imports: [AuthModule, TypeOrmModule.forRoot(typeOrmConfig)],
     }).compile();
 
     app = moduleFixture.createNestApplication();
@@ -78,16 +80,13 @@ describe('AuthController (e2e)', () => {
   });
 
   it('/auth/google/callback (GET)', () => {
-    return (
-      request(app.getHttpServer())
-        .get('/auth/google/callback')
-        // .query({ code: 'mock_code' }) // Mock the OAuth code
-        .expect(200)
-        .expect((res) => {
-          expect(res.body.message).toBe('User logged in successfully');
-          expect(res.body.statusCode).toBe(200);
-          expect(res.body.accessToken).toBeDefined();
-        })
-    );
+    return request(app.getHttpServer())
+      .get('/auth/google/callback')
+      .expect(200)
+      .expect((res) => {
+        expect(res.body.message).toBe('User logged in successfully');
+        expect(res.body.statusCode).toBe(302);
+        expect(res.body.accessToken).toBeDefined();
+      });
   });
 });

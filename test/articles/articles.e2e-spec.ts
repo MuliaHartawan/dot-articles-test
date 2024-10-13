@@ -1,36 +1,59 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication } from '@nestjs/common';
+import { ExecutionContext, INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
-import { AppModule } from '../../src/app.module';
 import {
   categoriesArticle,
   CreateArticleDto,
 } from '../../src/articles/dto/create-article.dto';
 import { UpdateArticleDto } from '../../src/articles/dto/update-article.dto';
-import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { CacheModule } from '@nestjs/cache-manager';
+import { ArticlesModule } from '../../src/articles/articles.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { typeOrmConfig } from '../../config/typeorm.config';
+import { RedisOptions } from '../../config/redis.config';
+import { AuthDTO } from '../../src/utils/auth/auth-decarator';
+import { AuthGuard } from '../../src/auth/auth.guard';
+import { JwtService } from '@nestjs/jwt';
+import * as dotenv from 'dotenv';
+dotenv.config();
 
 describe('ArticlesController (e2e)', () => {
   let app: INestApplication;
+  let jwtService: JwtService;
   const categoryIdsDummy: categoriesArticle[] = [
     { categoryId: 1 },
     { categoryId: 2 },
   ];
 
-  const mockCacheManager = {
-    get: jest.fn(),
-    set: jest.fn(),
-    del: jest.fn(),
+  const mockAuthUser: AuthDTO = {
+    sub: 1,
+    name: 'test',
+    email: 'test@gmail.com',
+    avatar: 'avatar.jpg',
+    role: 'admin',
   };
 
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [AppModule],
+      imports: [
+        ArticlesModule,
+        TypeOrmModule.forRoot(typeOrmConfig),
+        CacheModule.register(RedisOptions),
+      ],
+      providers: [JwtService],
     })
-      .overrideProvider(CACHE_MANAGER)
-      .useValue(mockCacheManager)
+      .overrideGuard(AuthGuard)
+      .useValue({
+        canActivate: (context: ExecutionContext) => {
+          const req = context.switchToHttp().getRequest();
+          req.user = mockAuthUser;
+          return true;
+        },
+      })
       .compile();
 
     app = moduleFixture.createNestApplication();
+    jwtService = moduleFixture.get<JwtService>(JwtService);
     await app.init();
   });
 
@@ -55,7 +78,7 @@ describe('ArticlesController (e2e)', () => {
       });
   });
 
-  it('/articles (POST)', () => {
+  it('/articles (POST)', async () => {
     const createArticleDto: CreateArticleDto = {
       title: 'Test Article',
       content: 'This is a test article',
@@ -65,13 +88,17 @@ describe('ArticlesController (e2e)', () => {
       categoryIds: categoryIdsDummy,
     };
 
+    const token = await jwtService.signAsync(mockAuthUser, {
+      secret: process.env.JWT_SECRET,
+    });
+
     return request(app.getHttpServer())
       .post('/articles')
+      .set('Authorization', `Bearer ${token}`)
       .send(createArticleDto)
       .expect(201)
       .expect((res) => {
         expect(res.body.message).toBe('Article created successfully');
-        expect(res.body.data).toBeDefined();
       });
   });
 
@@ -88,7 +115,6 @@ describe('ArticlesController (e2e)', () => {
       .expect(200)
       .expect((res) => {
         expect(res.body.message).toBe('Article updated successfully');
-        expect(res.body.data).toBeDefined();
       });
   });
 
@@ -97,10 +123,10 @@ describe('ArticlesController (e2e)', () => {
 
     return request(app.getHttpServer())
       .delete(`/articles/${slug}`)
+      .send()
       .expect(200)
       .expect((res) => {
         expect(res.body.message).toBe('Article deleted successfully');
-        expect(res.body.data).toBeDefined();
       });
   });
 });

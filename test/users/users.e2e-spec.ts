@@ -1,8 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
-import { AppModule } from '../../src/app.module';
 import { UpdateUserDto } from '../../src/users/dto/update-user.dto';
+import { UsersModule } from '../../src/users/users.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { typeOrmConfig } from '../../config/typeorm.config';
 
 describe('UsersController (e2e)', () => {
   let app: INestApplication;
@@ -10,7 +12,7 @@ describe('UsersController (e2e)', () => {
 
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [AppModule],
+      imports: [UsersModule, TypeOrmModule.forRoot(typeOrmConfig)],
     }).compile();
 
     app = moduleFixture.createNestApplication();

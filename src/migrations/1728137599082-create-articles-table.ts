@@ -45,7 +45,7 @@ export class CreateArticlesTable1728137599082 implements MigrationInterface {
             name: 'status',
             type: 'enum',
             enum: ['draft', 'published', 'archived'],
-            default: 'draft',
+            default: `'draft'`,
           },
           {
             name: 'view_count',

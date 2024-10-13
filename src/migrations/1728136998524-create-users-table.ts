@@ -54,7 +54,7 @@ export class CreateUsersTable1728136998524 implements MigrationInterface {
             name: 'role',
             type: 'enum',
             enum: ['admin', 'author', 'user'],
-            default: 'user',
+            default: `'user'`,
           },
           {
             name: 'created_at',

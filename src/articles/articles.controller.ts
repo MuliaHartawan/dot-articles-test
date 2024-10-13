@@ -83,7 +83,7 @@ export class ArticlesController {
   @Delete(':slug')
   @HttpCode(HttpStatus.OK)
   @ApiParam({ name: 'slug', type: String })
-  async remove(slug: string, @Res() res: Response) {
+  async remove(@Param() slug: string, @Res() res: Response) {
     const result = await this.articlesService.remove(slug);
     res.status(HttpStatus.OK).json({
       statusCode: HttpStatus.OK,

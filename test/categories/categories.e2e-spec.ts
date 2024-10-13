@@ -1,16 +1,18 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
-import { AppModule } from '../../src/app.module';
 import { CreateCategoryDto } from '../../src/categories/dto/create-category.dto';
 import { UpdateCategoryDto } from '../../src/categories/dto/update-category.dto';
+import { CategoriesModule } from '../../src/categories/categories.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { typeOrmConfig } from '../../config/typeorm.config';
 
 describe('CategoriesController (e2e)', () => {
   let app: INestApplication;
 
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [AppModule],
+      imports: [CategoriesModule, TypeOrmModule.forRoot(typeOrmConfig)],
     }).compile();
 
     app = moduleFixture.createNestApplication();
