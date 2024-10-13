@@ -22,52 +22,55 @@
   <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
   [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
-## Description
+````markdown
+## Project Goals 🎯
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+This project was created to tackle the challenge presented in the internship listing at DOT Malang 2024 Batch 3 as a Backend Developer. In this project, I aimed to build an efficient and scalable application, with a good architecture and clear documentation. Below is the database design used:
 
-## Installation
+![Database Design](public/img/database-design.png)
 
-```bash
-$ npm install
+## Prerequisites 🔧
+
+Before getting started, make sure you have the following installed on your machine:
+
+- **Docker**: To run the application in containers.
+- **Node.js**: The latest version to ensure compatibility.
+
+## Installation Steps 🚀
+
+Follow the steps below to install the project:
+
+1. Clone this repository:
+   ```bash
+   git clone https://github.com/MuliaHartawan/dot-articles-test.git
+   cd dot-articles-test
+   ```
+````
+
+2. Build and run with Docker:
+
+   ```bash
+   make run-app
+   ```
+
+3. Access the application at `http://localhost:3000`
+
+## API Documentation 📚
+
+For more information on how to use the API, you can access:
+
+- Documentation folder: `docs/api.md`
+- Swagger UI: [http://localhost:3000/api/v1/api-list](http://localhost:3000/api/v1/api-list)
+
+## Future Vision 🌟
+
+As an amateur Backend Developer, I want to continue sharpening my skills and knowledge in software development. I want to get a deeper understanding of system architecture, database optimization, and best practices in API development. With a strong passion for learning, I hope to contribute significantly to future projects and become a reliable professional in the industry. 🌟
+
+Thank you for checking out this project! If you have any questions, feel free to contact me. 😊
+
 ```
-
-## Running the app
-
-```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
-```
-
-## Test
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
 
 ## License
 
 Nest is [MIT licensed](LICENSE).
+```
