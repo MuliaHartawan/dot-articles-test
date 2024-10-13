@@ -33,7 +33,6 @@ export const typeOrmConfig: TypeOrmModuleOptions = {
   entities: [join(__dirname, '../', '**', '*.entity.{ts,js}')],
   migrations: [join(__dirname, '../src/migrations/*.{ts,js}')],
   synchronize: true,
-  migrationsRun: true,
   logging: true,
 };
 

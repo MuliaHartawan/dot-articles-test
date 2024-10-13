@@ -31,8 +31,21 @@ services:
     networks:
       - dot-articles-network
 
+  mysql:
+    image: mysql:latest
+    container_name: mysql-service
+    env_file: .env
+    volumes:
+      - mysql_data:/var/lib/mysql
+    ports:
+      - 3306:3306
+    restart: unless-stopped
+    networks:
+      - dot-articles-network
+
 volumes:
   redis_data:
+  mysql_data:
 
 networks:
   dot-articles-network:
