@@ -34,15 +34,16 @@ export default class Article {
   @Column({ type: 'int', default: 0 })
   viewCount: number;
 
-  @Column({ type: 'timestamp' })
+  @Column({ type: 'datetime', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;
 
   @Column({
-    type: 'timestamp',
+    type: 'datetime',
+    default: () => 'CURRENT_TIMESTAMP',
   })
   updatedAt: Date;
 
-  @Column({ type: 'timestamp', nullable: true })
+  @Column({ type: 'datetime', nullable: true })
   publishedAt: Date;
 
   @ManyToMany(() => Category, (category) => category.articles)
