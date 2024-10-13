@@ -22,7 +22,7 @@
   <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
   [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
-````markdown
+
 ## Project Goals 🎯
 
 This project was created to tackle the challenge presented in the internship listing at DOT Malang 2024 Batch 3 as a Backend Developer. In this project, I aimed to build an efficient and scalable application, with a good architecture and clear documentation. Below is the database design used:
@@ -73,4 +73,4 @@ Thank you for checking out this project! If you have any questions, feel free to
 ## License
 
 Nest is [MIT licensed](LICENSE).
-```
+
