@@ -40,7 +40,7 @@ export class ArticlesController {
   @Get(':slug')
   @HttpCode(HttpStatus.OK)
   @ApiParam({ name: 'slug', type: String })
-  async findOne(@Param() slug: string, @Res() res: Response) {
+  async findOne(@Param('slug') slug: string, @Res() res: Response) {
     const article = await this.articlesService.findOne(slug);
     return res.status(HttpStatus.OK).json({
       statusCode: HttpStatus.OK,
@@ -68,7 +68,7 @@ export class ArticlesController {
   @HttpCode(HttpStatus.OK)
   @ApiParam({ name: 'slug', type: String })
   async update(
-    @Param() slug: string,
+    @Param('slug') slug: string,
     @Body() article: UpdateArticleDto,
     @Res() res: Response,
   ) {
@@ -83,7 +83,7 @@ export class ArticlesController {
   @Delete(':slug')
   @HttpCode(HttpStatus.OK)
   @ApiParam({ name: 'slug', type: String })
-  async remove(@Param() slug: string, @Res() res: Response) {
+  async remove(@Param('slug') slug: string, @Res() res: Response) {
     const result = await this.articlesService.remove(slug);
     res.status(HttpStatus.OK).json({
       statusCode: HttpStatus.OK,

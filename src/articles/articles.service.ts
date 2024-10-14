@@ -26,13 +26,20 @@ export class ArticlesService {
     if (cachedArticle) {
       return cachedArticle;
     }
-    const articles = await this.articleRepository.find();
+    const articles = await this.articleRepository.find({
+      where: { status: 'published' },
+      relations: ['categories'],
+    });
     await this.cacheManager.set('articles', articles, 3600);
     return articles;
   }
 
   async findOne(slug: string): Promise<Article | undefined> {
-    const article = await this.articleRepository.findOneBy({ title: slug });
+    const article = await this.articleRepository.findOne({
+      where: { slug: slug },
+      relations: ['categories'],
+    });
+
     if (article) {
       await this.incrementViewCount(article.id);
     }
@@ -69,7 +76,7 @@ export class ArticlesService {
 
   async update(slug: string, articleData: UpdateArticleDto): Promise<void> {
     const existingArticle = await this.articleRepository.findOne({
-      where: { title: slug },
+      where: { slug: slug },
       relations: ['categories'],
     });
     if (!existingArticle) return;
@@ -91,7 +98,7 @@ export class ArticlesService {
   }
 
   async remove(slug: string): Promise<void> {
-    await this.articleRepository.delete({ slug });
+    await this.articleRepository.delete({ slug: slug });
     await this.cacheManager.del('articles');
   }
 
@@ -105,6 +112,9 @@ export class ArticlesService {
   }
 
   async getArticleBySlug(slug: string): Promise<Article | undefined> {
-    return this.articleRepository.findOne({ where: { slug } });
+    return this.articleRepository.findOne({
+      where: { slug: slug },
+      relations: ['categories'],
+    });
   }
 }

@@ -51,7 +51,7 @@ export class CategoriesController {
   @Patch(':id')
   @ApiParam({ name: 'id', type: String })
   async update(
-    @Param() id: number,
+    @Param('id') id: number,
     @Body() updateCategoryDto: UpdateCategoryDto,
     @Res() res: Response,
   ) {
@@ -66,7 +66,7 @@ export class CategoriesController {
   @HttpCode(HttpStatus.OK)
   @Delete(':id')
   @ApiParam({ name: 'id', type: String })
-  async remove(@Param() id: number, @Res() res: Response) {
+  async remove(@Param('id') id: number, @Res() res: Response) {
     const result = await this.categoriesService.remove(id);
     res.status(HttpStatus.OK).json({
       statusCode: HttpStatus.OK,
